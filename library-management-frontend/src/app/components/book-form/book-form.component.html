@@ -1,0 +1,92 @@
+<div class="book-form-container">
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit Book' : 'Add New Book' }}</h2>
+
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="form-content">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter book title">
+          <mat-error *ngIf="bookForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+          <mat-error *ngIf="bookForm.get('title')?.hasError('maxlength')">
+            Title is too long
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Author</mat-label>
+          <input matInput formControlName="author" placeholder="Enter author name">
+          <mat-error *ngIf="bookForm.get('author')?.hasError('required')">
+            Author is required
+          </mat-error>
+          <mat-error *ngIf="bookForm.get('author')?.hasError('maxlength')">
+            Author name is too long
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>ISBN</mat-label>
+          <input matInput formControlName="isbn" placeholder="Enter ISBN (optional)">
+          <mat-error *ngIf="bookForm.get('isbn')?.hasError('maxlength')">
+            ISBN is too long
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Published Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="publishedDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="bookForm.get('publishedDate')?.hasError('required')">
+            Published date is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="number" formControlName="quantity" placeholder="Enter quantity">
+          <mat-error *ngIf="bookForm.get('quantity')?.hasError('required')">
+            Quantity is required
+          </mat-error>
+          <mat-error *ngIf="bookForm.get('quantity')?.hasError('min')">
+            Quantity must be greater than or equal to 0
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Categories</mat-label>
+          <mat-select formControlName="categoryIds" multiple>
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="bookForm.get('categoryIds')?.hasError('required')">
+            At least one category is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="bookForm.invalid || loading">
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

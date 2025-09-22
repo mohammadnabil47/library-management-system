@@ -1,0 +1,40 @@
+<div class="category-form-container">
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit Category' : 'Add New Category' }}</h2>
+
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="form-content">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Enter category name">
+          <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
+            Name is required
+          </mat-error>
+          <mat-error *ngIf="categoryForm.get('name')?.hasError('maxlength')">
+            Name is too long
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Enter category description (optional)" rows="3"></textarea>
+          <mat-error *ngIf="categoryForm.get('description')?.hasError('maxlength')">
+            Description is too long
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || loading">
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
